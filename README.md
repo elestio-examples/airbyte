@@ -4,6 +4,10 @@
 
 Example CI/CD pipeline showing how to deploy Airbyte on Elestio.
 
+<br/>
+<img src="screenshot.jpg" alt="Airbyte screenshot" width="100%" />
+<br/>
+
 # Once deployed ...
 
 You are now able to sign to the Airbyte Web UI here:
