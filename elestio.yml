@@ -2,7 +2,7 @@ ports:
   - protocol: "HTTPS"
     targetProtocol: "HTTPS"
     listeningPort: "443"
-    targetPort: "8001"
+    targetPort: "8050"
     targetIP: "172.17.0.1"
     public: true
     path: "/"
@@ -49,7 +49,7 @@ environments:
   - key: "CONFIGS_DATABASE_MINIMUM_FLYWAY_MIGRATION_VERSION"
     value: "0.35.15.001"  
   - key: "TEMPORAL_HOST"
-    value: "airbyte-temporal:7233"  
+    value: "temporal:7233"  
   - key: "INTERNAL_API_HOST"
     value: "server:8001"  
   - key: "WEBAPP_URL"

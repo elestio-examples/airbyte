@@ -140,7 +140,7 @@ services:
     #container_name: airbyte-webapp
     restart: unless-stopped
     ports:
-      - 172.17.0.1:8000:80
+      - 172.17.0.1:8050:80
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
       - AIRBYTE_VERSION=${VERSION}
@@ -150,7 +150,7 @@ services:
       - PAPERCUPS_STORYTIME=${PAPERCUPS_STORYTIME:-}
       - TRACKING_STRATEGY=${TRACKING_STRATEGY}
 
-  airbyte-temporal:
+  temporal:
     image: airbyte/temporal:${VERSION}
     #container_name: airbyte-temporal
     restart: unless-stopped
@@ -166,7 +166,7 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
     volumes:
       - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
-      
+
   airbyte-cron:
     image: airbyte/cron:${VERSION}
     #container_name: airbyte-cron
