@@ -95,8 +95,8 @@ services:
       - USE_STREAM_CAPABLE_STATE=${USE_STREAM_CAPABLE_STATE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./workspace:${WORKSPACE_ROOT}
-      - ./local:${LOCAL_ROOT}
+      - workspace:${WORKSPACE_ROOT}
+      - ${LOCAL_ROOT}:${LOCAL_ROOT}
 
   server:
     image: airbyte/server:${VERSION}
@@ -182,3 +182,14 @@ services:
       - WORKSPACE_ROOT=${WORKSPACE_ROOT}
     volumes:
       - ./workspace:${WORKSPACE_ROOT}
+
+volumes:
+  workspace:
+    name: ${WORKSPACE_DOCKER_MOUNT}
+  # the data volume is only needed for backward compatibility; when users upgrade
+  # from an old Airbyte version that relies on file-based configs, the server needs
+  # to read this volume to copy their configs to the database
+  data:
+    name: ${DATA_DOCKER_MOUNT}
+  db:
+    name: ${DB_DOCKER_MOUNT}      
