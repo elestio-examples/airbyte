@@ -85,7 +85,12 @@ environments:
   - key: "RUN_DATABASE_MIGRATION_ON_STARTUP"
     value: "true" 
   - key: "SECRET_PERSISTENCE"
-    value: "NONE"                          
+    value: "NONE"
+  - key: "WORKERS_MICRONAUT_ENVIRONMENTS"
+    value: "control-plane"
+  - key: "CRON_MICRONAUT_ENVIRONMENTS"
+    value: "control-plane"
+                        
 config:
   runTime: "dockerCompose"
   version: ""
