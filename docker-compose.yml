@@ -99,7 +99,7 @@ services:
       - workspace:${WORKSPACE_ROOT}
       - ${LOCAL_ROOT}:${LOCAL_ROOT}
 
-  server:
+  airbyte-server:
     image: airbyte/server:${VERSION}
     #container_name: airbyte-server
     restart: unless-stopped
@@ -136,12 +136,12 @@ services:
       - ./data:${CONFIG_ROOT}
       - ./local:${LOCAL_ROOT}
 
-  webapp:
+  airbyte-webapp:
     image: airbyte/webapp:${VERSION}
     #container_name: airbyte-webapp
     restart: unless-stopped
-    ports:
-      - 172.17.0.1:8050:80
+    # ports:
+    #   - 172.17.0.1:8050:80
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
       - AIRBYTE_VERSION=${VERSION}
@@ -150,12 +150,14 @@ services:
       - OPENREPLAY=${OPENREPLAY:-}
       - PAPERCUPS_STORYTIME=${PAPERCUPS_STORYTIME:-}
       - TRACKING_STRATEGY=${TRACKING_STRATEGY}
+      - CONNECTOR_BUILDER_API_HOST=${CONNECTOR_BUILDER_API_HOST}
+      - CONNECTOR_BUILDER_API_URL=${CONNECTOR_BUILDER_API_URL:-}
 
-  temporal:
+  airbyte-temporal:
     image: airbyte/temporal:${VERSION}
     #container_name: airbyte-temporal
     restart: unless-stopped
-    #ports:
+    # ports:
     #  - 172.17.0.1:7233:7233
     environment:
       - DB=postgresql
@@ -167,6 +169,29 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
     volumes:
       - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
+
+  airbyte-connector-builder-server:
+    image: airbyte/connector-builder-server:${VERSION} # Replace with airbyte/connector-atelier-server:${VERSION} to test the builder micronaut refactor
+    restart: unless-stopped
+    # ports:
+    #   - 80
+    environment:
+      - AIRBYTE_VERSION=${VERSION}
+    depends_on:
+      - bootloader
+
+  airbyte-proxy:
+    image: airbyte/proxy:${VERSION}
+    restart: unless-stopped
+    ports:
+      - "172.17.0.1:8050:8000"
+    environment:
+      - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME}
+      - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
+      - BASIC_AUTH_PROXY_TIMEOUT=${BASIC_AUTH_PROXY_TIMEOUT}
+    depends_on:
+      - airbyte-webapp
+      - airbyte-server
 
   airbyte-cron:
     image: airbyte/cron:${VERSION}
@@ -182,6 +207,9 @@ services:
       - TEMPORAL_HISTORY_RETENTION_IN_DAYS=${TEMPORAL_HISTORY_RETENTION_IN_DAYS}
       - WORKSPACE_ROOT=${WORKSPACE_ROOT}
       - MICRONAUT_ENVIRONMENTS=${WORKERS_MICRONAUT_ENVIRONMENTS}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_USER=${DATABASE_USER}
     volumes:
       - ./workspace:${WORKSPACE_ROOT}
 
