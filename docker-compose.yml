@@ -28,7 +28,7 @@ services:
   db:
     image: airbyte/db:${VERSION}
     #container_name: airbyte-db
-    restart: unless-stopped
+    restart: always
     environment:
       - CONFIG_DATABASE_PASSWORD=${CONFIG_DATABASE_PASSWORD:-}
       - CONFIG_DATABASE_URL=${CONFIG_DATABASE_URL:-}
@@ -44,7 +44,7 @@ services:
   worker:
     image: airbyte/worker:${VERSION}
     #container_name: airbyte-worker
-    restart: unless-stopped
+    restart: always
     environment:
       - AIRBYTE_VERSION=${VERSION}
       - AUTO_DISABLE_FAILING_CONNECTIONS=${AUTO_DISABLE_FAILING_CONNECTIONS}
@@ -102,7 +102,7 @@ services:
   airbyte-server:
     image: airbyte/server:${VERSION}
     #container_name: airbyte-server
-    restart: unless-stopped
+    restart: always
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
       - AIRBYTE_VERSION=${VERSION}
@@ -139,7 +139,7 @@ services:
   airbyte-webapp:
     image: airbyte/webapp:${VERSION}
     #container_name: airbyte-webapp
-    restart: unless-stopped
+    restart: always
     # ports:
     #   - 172.17.0.1:8050:80
     environment:
@@ -156,7 +156,7 @@ services:
   airbyte-temporal:
     image: airbyte/temporal:${VERSION}
     #container_name: airbyte-temporal
-    restart: unless-stopped
+    restart: always
     # ports:
     #  - 172.17.0.1:7233:7233
     environment:
@@ -172,7 +172,7 @@ services:
 
   airbyte-connector-builder-server:
     image: airbyte/connector-builder-server:${VERSION} # Replace with airbyte/connector-atelier-server:${VERSION} to test the builder micronaut refactor
-    restart: unless-stopped
+    restart: always
     # ports:
     #   - 80
     environment:
@@ -182,7 +182,7 @@ services:
 
   airbyte-proxy:
     image: airbyte/proxy:${VERSION}
-    restart: unless-stopped
+    restart: always
     ports:
       - "172.17.0.1:8050:8000"
     environment:
@@ -196,7 +196,7 @@ services:
   airbyte-cron:
     image: airbyte/cron:${VERSION}
     #container_name: airbyte-cron
-    restart: unless-stopped
+    restart: always
     environment:
       - DB=postgresql
       - DB_PORT=${DATABASE_PORT}
