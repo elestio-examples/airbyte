@@ -1,8 +1,7 @@
 version: "3.7"
 services:
-
   init:
-    image: airbyte/init:${VERSION}
+    image: airbyte/init:${SOFTWARE_VERSION_TAG}
     #container_name: init
     command: /bin/sh -c "./scripts/create_mount_directories.sh /local_parent ${HACK_LOCAL_ROOT_PARENT} ${LOCAL_ROOT}"
     environment:
@@ -12,10 +11,10 @@ services:
       - ./tmp:/local_parent
 
   bootloader:
-    image: airbyte/bootloader:${VERSION}
+    image: airbyte/bootloader:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-bootloader
     environment:
-      - AIRBYTE_VERSION=${VERSION}
+      - AIRBYTE_VERSION=${SOFTWARE_VERSION_TAG}
       - CONFIG_DATABASE_PASSWORD=${CONFIG_DATABASE_PASSWORD:-}
       - CONFIG_DATABASE_URL=${CONFIG_DATABASE_URL:-}
       - CONFIG_DATABASE_USER=${CONFIG_DATABASE_USER:-}
@@ -26,7 +25,7 @@ services:
       - RUN_DATABASE_MIGRATION_ON_STARTUP=${RUN_DATABASE_MIGRATION_ON_STARTUP}
 
   db:
-    image: airbyte/db:${VERSION}
+    image: airbyte/db:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-db
     restart: always
     environment:
@@ -42,11 +41,11 @@ services:
       - ./db:/var/lib/postgresql/data
 
   worker:
-    image: airbyte/worker:${VERSION}
+    image: airbyte/worker:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-worker
     restart: always
     environment:
-      - AIRBYTE_VERSION=${VERSION}
+      - AIRBYTE_VERSION=${SOFTWARE_VERSION_TAG}
       - AUTO_DISABLE_FAILING_CONNECTIONS=${AUTO_DISABLE_FAILING_CONNECTIONS}
       - CONFIG_DATABASE_PASSWORD=${CONFIG_DATABASE_PASSWORD:-}
       - CONFIG_DATABASE_URL=${CONFIG_DATABASE_URL:-}
@@ -100,12 +99,12 @@ services:
       - ${LOCAL_ROOT}:${LOCAL_ROOT}
 
   airbyte-server:
-    image: airbyte/server:${VERSION}
+    image: airbyte/server:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-server
     restart: always
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
-      - AIRBYTE_VERSION=${VERSION}
+      - AIRBYTE_VERSION=${SOFTWARE_VERSION_TAG}
       - CONFIG_DATABASE_PASSWORD=${CONFIG_DATABASE_PASSWORD:-}
       - CONFIG_DATABASE_URL=${CONFIG_DATABASE_URL:-}
       - CONFIG_DATABASE_USER=${CONFIG_DATABASE_USER:-}
@@ -137,14 +136,14 @@ services:
       - ./local:${LOCAL_ROOT}
 
   airbyte-webapp:
-    image: airbyte/webapp:${VERSION}
+    image: airbyte/webapp:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-webapp
     restart: always
     # ports:
     #   - 172.17.0.1:8050:80
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
-      - AIRBYTE_VERSION=${VERSION}
+      - AIRBYTE_VERSION=${SOFTWARE_VERSION_TAG}
       - API_URL=${API_URL:-}
       - INTERNAL_API_HOST=${INTERNAL_API_HOST}
       - OPENREPLAY=${OPENREPLAY:-}
@@ -154,7 +153,7 @@ services:
       - CONNECTOR_BUILDER_API_URL=${CONNECTOR_BUILDER_API_URL:-}
 
   airbyte-temporal:
-    image: airbyte/temporal:${VERSION}
+    image: airbyte/temporal:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-temporal
     restart: always
     # ports:
@@ -171,17 +170,17 @@ services:
       - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
 
   airbyte-connector-builder-server:
-    image: airbyte/connector-builder-server:${VERSION} # Replace with airbyte/connector-atelier-server:${VERSION} to test the builder micronaut refactor
+    image: airbyte/connector-builder-server:${SOFTWARE_VERSION_TAG} # Replace with airbyte/connector-atelier-server:${SOFTWARE_VERSION_TAG} to test the builder micronaut refactor
     restart: always
     # ports:
     #   - 80
     environment:
-      - AIRBYTE_VERSION=${VERSION}
+      - AIRBYTE_VERSION=${SOFTWARE_VERSION_TAG}
     depends_on:
       - bootloader
 
   airbyte-proxy:
-    image: airbyte/proxy:${VERSION}
+    image: airbyte/proxy:${SOFTWARE_VERSION_TAG}
     restart: always
     ports:
       - "172.17.0.1:8050:8000"
@@ -194,7 +193,7 @@ services:
       - airbyte-server
 
   airbyte-cron:
-    image: airbyte/cron:${VERSION}
+    image: airbyte/cron:${SOFTWARE_VERSION_TAG}
     #container_name: airbyte-cron
     restart: always
     environment:
