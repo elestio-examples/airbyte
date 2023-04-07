@@ -9,7 +9,7 @@ ports:
     isAuth: false
 environments:
   - key: "SOFTWARE_VERSION_TAG"
-    value: "0.42.0"
+    value: "0.43.1"
   - key: "ADMIN_PASSWORD"
     value: "random_password"
   - key: "CONFIG_ROOT"
