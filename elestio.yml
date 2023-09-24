@@ -9,7 +9,7 @@ ports:
     isAuth: false
 environments:
   - key: "SOFTWARE_VERSION_TAG"
-    value: "0.43.1"
+    value: "0.50.30"
   - key: "ADMIN_PASSWORD"
     value: "random_password"
   - key: "CONFIG_ROOT"
@@ -98,6 +98,12 @@ environments:
     value: "root"
   - key: "BASIC_AUTH_PASSWORD"
     value: "random_password"
+  - key: "AIRBYTE_API_HOST"
+    value: "airbyte-api-server:8006"
+  - key: "AUTO_DETECT_SCHEMA"
+    value: "true"
+  - key: "FEATURE_FLAG_CLIENT"
+    value: "config"
 
 config:
   runTime: "dockerCompose"
